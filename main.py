@@ -72,13 +72,13 @@ def print_spin(columns):
 #get user deposit
 def deposit():
     while True:
-        amount = input("Lay down a deposit ($): ")
+        amount = input(f"Lay down a deposit (minimum ${MIN_BET}): ")
         if amount.isdigit():
             amount = int(amount)
-            if amount > 0:
+            if amount >= MIN_BET:
                 break
             else:
-                print("Deposit must be greater than zero!\n")
+                print(f"Deposit must be greater than ${MIN_BET}!\n")
         else:
             print("Deposit must be a valid number!\n")
         
@@ -117,8 +117,8 @@ def get_bet():
     return amount
 
 def game(balance):
-    lines = get_number_of_lines()
     while True:
+        lines = get_number_of_lines()
         bet = get_bet()
         total_bet = bet*lines
         
@@ -127,8 +127,10 @@ def game(balance):
         else:
             break
 
-
-    print(f"You are betting ${bet} on {lines} lines. Total bet: ${total_bet}\n")
+    if lines>1:
+        print(f"You are betting ${bet} on 1 line. Total bet: ${total_bet}\n")
+    else:
+        print(f"You are betting ${bet} on {lines} lines. Total bet: ${total_bet}\n")
 
     slots = get_spin(ROWS, COLS, symbol_count)
     print_spin(slots)
@@ -141,13 +143,19 @@ def game(balance):
 def main():
     balance = deposit()
     while True:
-        print(f"Current balance: ${balance}")
-        play = input("Press enter to play (q to quit). ")
-        if play == "q":
-            break
+        if balance >= 10:
+            print(f"Current balance: ${balance}")
+            play = input("Press enter to play (q to quit). ")
+            if play == "q":
+                break
+            else:
+                balance += game(balance)
         else:
-            balance += game(balance)
-
-    print(f"You left with ${balance}!")
+            break
+    
+    if balance > 10:
+        print(f"You left with ${balance}!")
+    else:
+        print("Game over! You lost all your cash!!")
 
 main()
