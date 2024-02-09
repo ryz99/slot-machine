@@ -1,4 +1,5 @@
 import random
+import time
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -59,14 +60,25 @@ def get_spin(rows, cols, symbols):
     return columns
 
 
-#transposes columns before printing
+#transposes columns before printing - with fancy animations
 def print_spin(columns):
+#    for row in range(len(columns[0])):
+#        for i, column in enumerate(columns):
+#            if i != len(column) - 1: #this might be wrong: if i != len(columns) - 1
+#                print(column[row], end=" | ")
+#            else:
+#                print(column[row])
+#    print()
+    symbols = ["A", "B", "C", "D"]
+
     for row in range(len(columns[0])):
-        for i, column in enumerate(columns):
-            if i != len(columns) - 1: #this might be wrong: if i != len(column) - 1
-                print(column[row], end=" | ")
-            else:
-                print(column[row])
+        goal = 5
+        current = 0
+        while current < goal:
+            print(f"{random.choice(symbols)} | {random.choice(symbols)} | {random.choice(symbols)}", end="\r")
+            time.sleep(0.2)
+            current += 1
+        print(f"{columns[row][0]} | {columns[row][1]} | {columns[row][2]}")
 
 
 #get user deposit
